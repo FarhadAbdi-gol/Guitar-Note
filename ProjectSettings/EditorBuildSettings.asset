@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Guitar.unity
+    guid: 5ba7e1cdcf3b53a4888cd9fd4b899e1e
   m_configObjects: {}

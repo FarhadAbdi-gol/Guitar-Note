@@ -5,6 +5,6 @@ using UnityEngine;
 interface IStrategy
 {
     void setLevel(float speed);
-    void setListNote(List<int> noteList);
-    void setMusic(AudioClip clip);
+    void setListNote();
+    void setMusic();
 }
