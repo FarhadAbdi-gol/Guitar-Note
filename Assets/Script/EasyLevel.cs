@@ -8,7 +8,7 @@ public class EasyLevel : MonoBehaviour, IStrategy
     public static float EasySpeed;
     public AudioSource audioSource;
     public AudioClip clip;
-    List<int> EasyList = new List<int> { 3, 1, 1, 3, 4, 2, 3, 1, 2, 2, 3, 4, 4, 1, 2, 4, 3, 1, 2, 1, 3, 4, 4, 4, 1, 2, 3, 4, 1, 3 };
+    List<int> EasyList = new List<int> { 3, 1, 2, 3, 4, 2, 3, 1, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 2, 1, 3, 4, 2, 3, 1, 2, 3, 4, 1, 2 };
 
     ControlLevel CL;
 
@@ -17,10 +17,6 @@ public class EasyLevel : MonoBehaviour, IStrategy
         CL = GameObject.Find("ControleLevel").gameObject.GetComponent<ControlLevel>();
     }
 
-    public void setLevel(float speed)
-    {
-        speed=EasySpeed;
-    }
 
     public void setListNote()
     {
