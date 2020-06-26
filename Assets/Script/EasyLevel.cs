@@ -8,7 +8,8 @@ public class EasyLevel : MonoBehaviour, IStrategy
     public static float EasySpeed;
     public AudioSource audioSource;
     public AudioClip clip;
-    List<int> EasyList = new List<int> { 3, 1, 2, 3, 4, 2, 3, 1, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 2, 1, 3, 4, 2, 3, 1, 2, 3, 4, 1, 2 };
+    List<int> EasyList = new List<int> { 3, 1, 2, 3, 4, 2, 3, 1, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 2, 1, 3, 4, 2, 3, 1, 2, 3, 4, 1, 2, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 3, 4, 2, 3, 1, 2, 3, 4, 1, 2,
+                                         3, 1, 2, 3, 4, 2, 3, 1, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 2, 1, 3, 4, 2, 3, 1, 2, 3, 4, 1, 2, 3, 1, 2, 3, 4, 2, 3, 1, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 2, 1};
 
     ControlLevel CL;
 

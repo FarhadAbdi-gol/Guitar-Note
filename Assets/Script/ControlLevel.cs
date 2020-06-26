@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public enum Level
 {
-    Easy, Medium, Hard
+    Easy, Medium, Hard, ui
 }
 
 public class ControlLevel : MonoBehaviour
@@ -14,7 +14,7 @@ public class ControlLevel : MonoBehaviour
     #region public variables
     public GameObject Guitar;
     public GameObject dancer;
-    public GameObject Level_Panel, Game_Panel, Scores_Panel;//, Repeat_Panel;
+    public GameObject Level_Panel, Game_Panel, Scores_Panel;
   
     public GameObject win_Particaler;
     public GameObject ButtonR, ButtonB, ButtonG, ButtonP;
@@ -22,8 +22,8 @@ public class ControlLevel : MonoBehaviour
     public GameObject IndexInstance;
     public GameObject note;
     public GameObject winAnim,loseAnim;
-    public GameObject LuckM, LockH;
-    public Button MediumBtn , HardBtn; 
+    public GameObject LockM, LockH;
+    public Button EasyBtn, MediumBtn , HardBtn, ResetGameBtn; 
 
     public float noteX;
     public bool course=false;
@@ -32,17 +32,14 @@ public class ControlLevel : MonoBehaviour
     public int Conter;
     public Text Scoretxt;
     public Text HighScoretxt;
-    public Text ScoretxtRepeat;
     public Text Messagewin;
     public int Score=0;
     public int HighScore=0;
     public int countNote;
+    public string currentLevel;
 
-    public const string PpsScoreR = "PpsScoreR";
-    public const string PpsScoreB = "PpsScoreB";
-    public const string PpsScoreG = "PpsScoreG";
-    public const string PpsScoreP = "PpsScoreP";
     public const string PpsHighScore = "PpsHighScore";
+    public const string PpsScore = "PpsScore";
 
     //public AudioSource audioSource;
     //public AudioClip clip_EasyLevel;
@@ -68,12 +65,45 @@ public class ControlLevel : MonoBehaviour
         BtnB = GameObject.Find("ButtonB").gameObject.GetComponent<ButtonCL>();
         BtnG = GameObject.Find("ButtonG").gameObject.GetComponent<ButtonCL>();
         BtnP = GameObject.Find("ButtonP").gameObject.GetComponent<ButtonCL>();
-
     }
 
-    private void Update()
+    private void Start()
     {
-        if (course)
+       // PlayerPrefs.DeleteAll();
+        levelCurrent = Level.ui;
+        currentLevel = levelCurrent.ToString();
+        BtnB.txtB.text = "";
+        BtnR.txtR.text = "";
+        BtnG.txtG.text = "";
+        BtnP.txtP.text = "";
+        if (PlayerPrefs.HasKey(PpsScore))
+            Scoretxt.text = PlayerPrefs.GetInt(PpsScore).ToString();
+        if(PlayerPrefs.HasKey(PpsHighScore))
+            HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+        if (PlayerPrefs.GetInt(PpsHighScore) > 0)
+            ResetGameBtn.gameObject.SetActive(true);
+    }
+    private void Update()
+    {   
+        if(PlayerPrefs.GetInt(PpsHighScore)==300)
+        {
+            EasyBtn.interactable = false;
+            MediumBtn.interactable = false;
+            HardBtn.interactable = false;
+        }
+        if(PlayerPrefs.GetInt(PpsHighScore) == 0)
+        {
+            ResetGameBtn.gameObject.SetActive(false);
+        }
+        if(PlayerPrefs.GetInt(PpsHighScore) >= 200)
+        {
+            LockH.gameObject.SetActive(true);
+        }
+        if(PlayerPrefs.GetInt(PpsHighScore) >= 100)
+        {
+            LockM.gameObject.SetActive(true);
+        }
+        if (course == true && levelCurrent != Level.ui)
         {
             if (levelCurrent == Level.Easy)
                 ChangedLevel(Level.Easy);
@@ -94,7 +124,7 @@ public class ControlLevel : MonoBehaviour
                 Application.Quit();
             }
         }
-        if (Conter > 0)
+        if (Conter > 0 && levelCurrent != Level.ui)
         {
             Guitar.gameObject.GetComponent<Animator>().enabled = true;
             Guitar.gameObject.GetComponent<Animator>().Play("Guitar");
@@ -106,66 +136,53 @@ public class ControlLevel : MonoBehaviour
 
         CountNote();
 
-        if (countNote==0 && ButtonCL.CheckNote)
+        if (countNote==0 && ButtonCL.CheckNote==true && levelCurrent != Level.ui)
         {
-            course = true;
-            PlayerPrefs.SetInt(PpsScoreB, BtnB.ScoreB);
-            PlayerPrefs.SetInt(PpsScoreG, BtnG.ScoreG);
-            PlayerPrefs.SetInt(PpsScoreR, BtnR.ScoreR);
-            PlayerPrefs.SetInt(PpsScoreP, BtnP.ScoreP);
-            PlayerPrefs.Save();
+            course = false;
+           // Scores_Panel.gameObject.SetActive(false);
+            Level_Panel.gameObject.SetActive(true);
+            ShowScore();
+            if (PlayerPrefs.GetInt(PpsHighScore) > 0)
+                ResetGameBtn.gameObject.SetActive(true);
 
-            if (levelCurrent == Level.Easy && Score > 29)
-            {
-                Scores_Panel.gameObject.SetActive(false);
-                Level_Panel.gameObject.SetActive(true);
-                ShowScore();
+            if (levelCurrent == Level.Easy && Score > 99)
+            {              
                 MediumBtn.interactable = true;
-                LuckM.gameObject.SetActive(false);
+                LockM.gameObject.SetActive(false);
+                EasyBtn.interactable = false;
+                Messagewin.text = "";
             }
             else
             {
-                Scores_Panel.gameObject.SetActive(false);
-                Level_Panel.gameObject.SetActive(true);
-                ShowScore();
-                MediumBtn.interactable = false;
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
             }
-            if (levelCurrent == Level.Medium && Score > 54)
+
+            if (levelCurrent == Level.Medium && Score > 99)
             {
-                Scores_Panel.gameObject.SetActive(false);
-                Level_Panel.gameObject.SetActive(true);
-                ShowScore();
                 HardBtn.interactable = true;
                 LockH.gameObject.SetActive(false);
+                MediumBtn.interactable = false;
+                Messagewin.text = "";
             }
             else
             {
-                Scores_Panel.gameObject.SetActive(false);
-                Level_Panel.gameObject.SetActive(true);
-                ShowScore();
-                HardBtn.interactable = false;
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
             }
-            if (levelCurrent == Level.Hard && Score > 79)
+            if (levelCurrent == Level.Hard && Score > 99)
             {
-                Scores_Panel.gameObject.SetActive(false);
-                Level_Panel.gameObject.SetActive(true);
-                ShowScore();
                 Messagewin.text = "You Win";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
             }
             else
             {
-                Scores_Panel.gameObject.SetActive(false);
-                Level_Panel.gameObject.SetActive(true);
-                ShowScore();
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
             }
+            levelCurrent = Level.ui;
         }
+        currentLevel = levelCurrent.ToString();
     }
     private void CountNote()
     {
@@ -181,38 +198,55 @@ public class ControlLevel : MonoBehaviour
     #region public Functions
     public void EasyLevel_Btn()
     {
-        Level_Panel.gameObject.SetActive(false);
-        Scores_Panel.gameObject.SetActive(true);
-        levelCurrent =Level.Easy;
-        course = true;
+        if(levelCurrent != Level.Easy && levelCurrent == Level.ui)
+        {
+            levelCurrent = Level.Easy;
+            Levels_btn();
+        }
+      
     }
     public void MediumLevel_Btn()
     {
-        Level_Panel.gameObject.SetActive(false);
-        Scores_Panel.gameObject.SetActive(true);
-        levelCurrent = Level.Medium;
-        course = true;
+        if (levelCurrent != Level.Medium && levelCurrent == Level.ui)
+        {
+            levelCurrent = Level.Medium;
+            Levels_btn();
+        }
     }
     public void HardLevel_Btn()
     {
-        Level_Panel.gameObject.SetActive(false);
-        Scores_Panel.gameObject.SetActive(true);
-        levelCurrent = Level.Hard;
-        course = true;
+        if(levelCurrent != Level.Medium && levelCurrent == Level.ui)
+        {
+            levelCurrent = Level.Hard;
+            Levels_btn();
+        }
     }
 
+    public void Levels_btn()
+    {
+        ButtonCL.CheckNote = false;
+        Level_Panel.gameObject.SetActive(false);
+        Scores_Panel.gameObject.SetActive(true);
+        course = true;
+        BtnB.txtB.text = "";
+        BtnG.txtG.text = "";
+        BtnR.txtR.text = "";
+        BtnP.txtP.text = "";
+        Indexlist = 0;
+        Score = 0;
+    }
     public void ChangedLevel(Level level)
     {
         switch (level)
         { case Level.Easy:
-              EL.setListNote();
-          break;
+                    EL.setListNote();
+                break;
           case Level.Medium:
-              ML.setListNote();
-          break;
+                    ML.setListNote();
+                break;
           case Level.Hard:
-              HL.setListNote();
-          break;            
+                    HL.setListNote();
+                 break;            
         }
         course = false;
     }
@@ -247,28 +281,67 @@ public class ControlLevel : MonoBehaviour
                 GameObject NoteP = Instantiate(note, new Vector3(ButtonP.transform.position.x, IndexInstance.transform.position.y + 2f, IndexInstance.transform.position.z), Quaternion.identity) as GameObject;
                 NoteP.GetComponent<MeshRenderer>().material.color = ButtonP.gameObject.GetComponent<MeshRenderer>().material.color;
             }
-            course = true;
+            
             Indexlist += 1;
             Conter -=1;
+           
+            course = true;
         }
     }
 
     public void ShowScore()
     {
-        Score = PlayerPrefs.GetInt(PpsScoreB)+ PlayerPrefs.GetInt(PpsScoreR)+ PlayerPrefs.GetInt(PpsScoreG) + PlayerPrefs.GetInt(PpsScoreP);
-      
-            if (Score > HighScore)
+        Score = BtnR.ScoreR + BtnB.ScoreB + BtnG.ScoreG + BtnP.ScoreP;
+        PlayerPrefs.SetInt(PpsScore, Score);
+        PlayerPrefs.Save();
+        Scoretxt.text = (Score).ToString();
+
+        if(PlayerPrefs.HasKey(PpsHighScore))
+        {
+            HighScore = PlayerPrefs.GetInt(PpsHighScore);
+            if (Score == Lenghlist)
             {
-                Scoretxt.text = (Score).ToString();
-                HighScoretxt.text = (Score).ToString();
-                PlayerPrefs.SetString(PpsHighScore, HighScoretxt.text);
+                HighScore += Score;
+                PlayerPrefs.SetInt(PpsHighScore, HighScore);
                 PlayerPrefs.Save();
+                HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                Delletkey();
             }
             else
             {
-                Scoretxt.text = (Score).ToString();
-                HighScoretxt.text = PlayerPrefs.GetString(PpsHighScore).ToString();
-            }      
+                if(HighScore > Score)
+                {
+                    PlayerPrefs.SetInt(PpsHighScore, HighScore);
+                    PlayerPrefs.Save();
+                    HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                    Delletkey();
+                }
+                else if(HighScore < Score)
+                {
+                    HighScore = Score;
+                    PlayerPrefs.SetInt(PpsHighScore, HighScore);
+                    PlayerPrefs.Save();
+                    HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                    Delletkey();
+                }
+            }                      
+        }
+        else
+        {
+            HighScore = Score;
+            PlayerPrefs.SetInt(PpsHighScore, HighScore);
+            PlayerPrefs.Save();
+            HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+            Delletkey();
+        }
+    }
+
+    public void Delletkey()
+    {
+        BtnR.ScoreR = 0;
+        BtnB.ScoreB = 0;
+        BtnG.ScoreG = 0;
+        BtnP.ScoreP = 0;
     }
     public static int IntParseFast(string value)
     {
@@ -293,28 +366,34 @@ public class ControlLevel : MonoBehaviour
     {
         Application.Quit();
     }
+    public void Reset_Game()
+    {
+        PlayerPrefs.SetInt(PpsHighScore, 0);
+        PlayerPrefs.SetInt(PpsScore, 0);
+        PlayerPrefs.Save();
+        Scoretxt.text= PlayerPrefs.GetInt(PpsScore).ToString();
+        HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+        EasyBtn.interactable = true;
+        MediumBtn.interactable = false;
+        HardBtn.interactable = false;
+        ResetGameBtn.interactable = false;
+        ResetGameBtn.gameObject.SetActive(false);
+        Scores_Panel.gameObject.SetActive(false);
+    }
 
-    ////public void BackofReapet()
-    ////{
-    ////    Repeat_Panel.gameObject.SetActive(false);
-    ////    Level_Panel.gameObject.SetActive(true);
-    ////}
     public void BackofLevel()
     {
-        Level_Panel.gameObject.SetActive(false);
-        Game_Panel.gameObject.SetActive(true);
+        if (levelCurrent == Level.ui)
+        {
+            Scores_Panel.gameObject.SetActive(false);
+            Level_Panel.gameObject.SetActive(false);
+            Game_Panel.gameObject.SetActive(true);
+        }
+        else
+        {
+            levelCurrent = Level.ui;
+        }
     }
-    //public void Repeat()
-    //{
-    //    course = true;
-
-    //    if (levelCurrent == Level.Easy)
-    //        EasyLevel_Btn();
-    //    if (levelCurrent == Level.Medium)
-    //        MediumLevel_Btn();
-    //    if (levelCurrent == Level.Hard)
-    //        HardLevel_Btn();
-    //}
     #endregion
 
 }

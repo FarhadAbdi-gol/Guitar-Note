@@ -29,6 +29,17 @@ public class ButtonCL : MonoBehaviour
         CL = GameObject.Find("ControleLevel").gameObject.GetComponent<ControlLevel>();
     }
 
+    private void Start()
+    {
+        if (current_Button == ButtonType.ButtonB)
+            txtB.text = "";
+        if (current_Button == ButtonType.ButtonR)
+            txtR.text = "";
+        if (current_Button == ButtonType.ButtonG)
+            txtG.text = "";
+        if (current_Button == ButtonType.ButtonP)
+            txtP.text = "";
+    }
     void Update()
     {
         if(!CL.Level_Panel.activeInHierarchy)
@@ -104,8 +115,8 @@ public class ButtonCL : MonoBehaviour
 
     private void GiveNote()
     {
-        CheckNote = true;
-        if (current_Button == ButtonType.ButtonR)
+         CheckNote = true;
+         if (current_Button == ButtonType.ButtonR)
          {
             CL.winAnim.gameObject.GetComponent<Animator>().Play("NoteR");
             ScoreR++;
@@ -166,7 +177,7 @@ public class ButtonCL : MonoBehaviour
         if (target.gameObject.name.Contains("Note"))
         {
             Destroy(target.gameObject, 1f);
-            CL.loseAnim.gameObject.SetActive(true);
+            CL.loseAnim.gameObject.GetComponent<Animator>().enabled = true;
             CL.loseAnim.gameObject.GetComponent<Animator>().Play("Loss");
 
             if (current_Button == ButtonType.ButtonR)
