@@ -13,10 +13,8 @@ public class ControlLevel : MonoBehaviour
 {
     #region public variables
     public GameObject Guitar;
-    public GameObject dancer;
     public GameObject Level_Panel, Game_Panel, Scores_Panel;
   
-    public GameObject win_Particaler;
     public GameObject ButtonR, ButtonB, ButtonG, ButtonP;
 
     public GameObject IndexInstance;
@@ -102,17 +100,25 @@ public class ControlLevel : MonoBehaviour
             EasyBtn.interactable = false;
             MediumBtn.interactable = false;
             HardBtn.interactable = false;
+            ResetGameBtn.gameObject.SetActive(true);
         }
         if(PlayerPrefs.GetInt(PpsHighScore) == 0)
         {
             ResetGameBtn.gameObject.SetActive(false);
         }
-        if(PlayerPrefs.GetInt(PpsHighScore) >= 200)
+        if (PlayerPrefs.GetInt(PpsHighScore) < 100)
+        {
+            LockH.gameObject.SetActive(true);
+            LockM.gameObject.SetActive(true);
+        }
+        if (PlayerPrefs.GetInt(PpsHighScore) >= 200)
         {
             LockH.gameObject.SetActive(false);
+            LockM.gameObject.SetActive(false);
         }
-        if(PlayerPrefs.GetInt(PpsHighScore) >= 100)
+        if(PlayerPrefs.GetInt(PpsHighScore) >= 100 && PlayerPrefs.GetInt(PpsHighScore) < 200)
         {
+            LockH.gameObject.SetActive(true);
             LockM.gameObject.SetActive(false);
         }
         if (course == true && levelCurrent != Level.ui)
@@ -161,37 +167,51 @@ public class ControlLevel : MonoBehaviour
                 MediumBtn.interactable = true;
                 LockM.gameObject.SetActive(false);
                 EasyBtn.interactable = false;
-                Messagewin.text = "";
+                Messagewin.text = "Good";
+                Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
+                levelCurrent = Level.ui;
             }
-            else
+            if(levelCurrent == Level.Easy && Score < 100)
             {
+                ResetGameBtn.interactable = true;
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
+                levelCurrent = Level.ui;
             }
+            //else
+            //{
+            //    Messagewin.text = "";
+            //    levelCurrent = Level.ui;
+            //}
 
             if (levelCurrent == Level.Medium && Score > 99)
             {
                 HardBtn.interactable = true;
                 LockH.gameObject.SetActive(false);
                 MediumBtn.interactable = false;
-                Messagewin.text = "";
+                Messagewin.text = "Perfect";
+                Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
+                levelCurrent = Level.ui;
             }
-            else
+            if (levelCurrent == Level.Medium && Score < 100)
             {
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
+                levelCurrent = Level.ui;
             }
+          
             if (levelCurrent == Level.Hard && Score > 99)
             {
                 Messagewin.text = "You Win";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
+                levelCurrent = Level.ui;
             }
-            else
+            if (levelCurrent == Level.Hard && Score < 100)
             {
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
+                levelCurrent = Level.ui;
             }
-            levelCurrent = Level.ui;
         }
         currentLevel = levelCurrent.ToString();
     }
@@ -233,7 +253,7 @@ public class ControlLevel : MonoBehaviour
     }
     public void HardLevel_Btn()
     {
-        if(levelCurrent != Level.Medium && levelCurrent == Level.ui)
+        if(levelCurrent != Level.Hard && levelCurrent == Level.ui)
         {
             EL.StopMusic();
             ML.StopMusic();
@@ -322,9 +342,17 @@ public class ControlLevel : MonoBehaviour
         if(PlayerPrefs.HasKey(PpsHighScore))
         {
             HighScore = PlayerPrefs.GetInt(PpsHighScore);
-            if (Score == Lenghlist)
+            if (Score == Lenghlist && HighScore==100 || HighScore == 200)
             {
                 HighScore += Score;
+                PlayerPrefs.SetInt(PpsHighScore, HighScore);
+                PlayerPrefs.Save();
+                HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                Delletkey();
+            }
+            else if(Score ==Lenghlist && HighScore <100 )
+            {
+                HighScore = Score;
                 PlayerPrefs.SetInt(PpsHighScore, HighScore);
                 PlayerPrefs.Save();
                 HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
@@ -349,7 +377,7 @@ public class ControlLevel : MonoBehaviour
                 }
             }                      
         }
-        else
+        else if(PlayerPrefs.GetInt(PpsHighScore)==0)
         {
             HighScore = Score;
             PlayerPrefs.SetInt(PpsHighScore, HighScore);
@@ -366,16 +394,7 @@ public class ControlLevel : MonoBehaviour
         BtnG.ScoreG = 0;
         BtnP.ScoreP = 0;
     }
-    public static int IntParseFast(string value)
-    {
-        int result = 0;
-        for (int i = 0; i < value.Length; i++)
-        {
-            char letter = value[i];
-            result = 10 * result + (letter - 48);
-        }
-        return result;
-    }
+
     public void StartGame()
     {
         Game_Panel.gameObject.SetActive(false);
@@ -403,6 +422,9 @@ public class ControlLevel : MonoBehaviour
         ResetGameBtn.gameObject.SetActive(false);
         Scores_Panel.gameObject.SetActive(false);
         Messagewin.text = "";
+        EL.StopMusic();
+        ML.StopMusic();
+        HL.StopMusic();
     }
 
     public void BackofLevel()
