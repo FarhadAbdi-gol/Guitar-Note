@@ -1,13 +1,11 @@
-﻿using System.Collections;
+﻿
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class EasyLevel : MonoBehaviour, IStrategy 
 {
-    public static float EasySpeed;
-    public AudioSource audioSource;
-    public AudioClip clip;
+    public bool mute;
+    public bool CheckClipE;
     List<int> EasyList = new List<int> { 3, 1, 2, 3, 4, 2, 3, 1, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 2, 1, 3, 4, 2, 3, 1, 2, 3, 4, 1, 2, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 3, 4, 2, 3, 1, 2, 3, 4, 1, 2,
                                          3, 1, 2, 3, 4, 2, 3, 1, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 2, 1, 3, 4, 2, 3, 1, 2, 3, 4, 1, 2, 3, 1, 2, 3, 4, 2, 3, 1, 2, 4, 3, 4, 2, 1, 2, 4, 3, 1, 2, 1};
 
@@ -26,11 +24,26 @@ public class EasyLevel : MonoBehaviour, IStrategy
 
     public void setMusic()
     {
-        if(clip!=null  && audioSource!=null)
+        if (CL.clip_EasyLevel != null && CL.audioSource != null && CheckClipE == false)
         {
-            audioSource.PlayOneShot(clip);
+            CL.audioSource.PlayOneShot(CL.clip_EasyLevel);
+            CheckClipE = true;
         }
     }
 
-    
+    public void StopMusic()
+    {
+        if(CL.clip_EasyLevel != null && CL.audioSource != null && CheckClipE == true)
+        {
+            CL.audioSource.Stop();
+            CheckClipE = false;
+        }
+    }
+    public void MuteMusic()
+    {
+        if (CL.clip_EasyLevel != null && CL.audioSource != null && CheckClipE == true)
+        {
+                CL.audioSource.mute = !CL.audioSource.mute;
+        }
+    }
 }

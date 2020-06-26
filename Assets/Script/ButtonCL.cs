@@ -118,6 +118,7 @@ public class ButtonCL : MonoBehaviour
          CheckNote = true;
          if (current_Button == ButtonType.ButtonR)
          {
+            CL.setMusic(CL.clip_Rnote);
             CL.winAnim.gameObject.GetComponent<Animator>().Play("NoteR");
             ScoreR++;
             txtR.text = ScoreR.ToString();
@@ -126,6 +127,7 @@ public class ButtonCL : MonoBehaviour
          }
          else if (current_Button == ButtonType.ButtonB)
          {
+            CL.setMusic(CL.clip_Bnote);
             CL.winAnim.gameObject.GetComponent<Animator>().Play("NoteB");
             ScoreB++;
             txtB.text = ScoreB.ToString();
@@ -134,6 +136,7 @@ public class ButtonCL : MonoBehaviour
          }
          else if (current_Button == ButtonType.ButtonG)
          {
+            CL.setMusic(CL.clip_Gnote);
             CL.winAnim.gameObject.GetComponent<Animator>().Play("NoteG");
             ScoreG++;
             txtG.text = ScoreG.ToString();
@@ -142,6 +145,7 @@ public class ButtonCL : MonoBehaviour
          }
          else if (current_Button == ButtonType.ButtonP)
          {
+            CL.setMusic(CL.clip_Pnote);
             CL.winAnim.gameObject.GetComponent<Animator>().Play("NoteP");
             ScoreP++;
             txtP.text = ScoreP.ToString();
@@ -176,6 +180,7 @@ public class ButtonCL : MonoBehaviour
     {
         if (target.gameObject.name.Contains("Note"))
         {
+            CL.setMusic(CL.clip_Fire);
             Destroy(target.gameObject, 1f);
             CL.loseAnim.gameObject.GetComponent<Animator>().enabled = true;
             CL.loseAnim.gameObject.GetComponent<Animator>().Play("Loss");

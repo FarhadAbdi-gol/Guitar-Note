@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: FarhadAbdigol
-  productName: Guitar hero
+  productName: Guitar Note
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.26666668, g: 0.027450982, b: 0.23529413, a: 1}
@@ -155,7 +155,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: ir.FarhadAbdigol.Guitarhero
+    Android: ir.FarhadAbdigol.GuitarNote
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
@@ -265,8 +265,8 @@ PlayerSettings:
   - m_BuildTarget: Android
     m_Icons:
     - m_Textures:
-      - {fileID: 2800000, guid: 96d2f2940d2e089439bcb92000d6612e, type: 3}
-      - {fileID: 2800000, guid: 96d2f2940d2e089439bcb92000d6612e, type: 3}
+      - {fileID: 2800000, guid: 076331c15323d694da711a45d7d56e38, type: 3}
+      - {fileID: 2800000, guid: 076331c15323d694da711a45d7d56e38, type: 3}
       m_Width: 432
       m_Height: 432
       m_Kind: 2
@@ -297,7 +297,7 @@ PlayerSettings:
       m_Kind: 2
       m_SubKind: 
     - m_Textures:
-      - {fileID: 2800000, guid: 96d2f2940d2e089439bcb92000d6612e, type: 3}
+      - {fileID: 2800000, guid: 076331c15323d694da711a45d7d56e38, type: 3}
       m_Width: 192
       m_Height: 192
       m_Kind: 1
@@ -333,7 +333,7 @@ PlayerSettings:
       m_Kind: 1
       m_SubKind: 
     - m_Textures:
-      - {fileID: 2800000, guid: 96d2f2940d2e089439bcb92000d6612e, type: 3}
+      - {fileID: 2800000, guid: 076331c15323d694da711a45d7d56e38, type: 3}
       m_Width: 192
       m_Height: 192
       m_Kind: 0

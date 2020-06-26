@@ -40,11 +40,18 @@ public class ControlLevel : MonoBehaviour
 
     public const string PpsHighScore = "PpsHighScore";
     public const string PpsScore = "PpsScore";
+    public const string PpsDellKey = "PpsDellKey";
 
-    //public AudioSource audioSource;
-    //public AudioClip clip_EasyLevel;
-    //public AudioClip clip_MediumLevel;
-    //public AudioClip clip_HardLevel;
+    public AudioSource audioSource;
+    public AudioClip clip_EasyLevel;
+    public AudioClip clip_MediumLevel;
+    public AudioClip clip_HardLevel;
+    public AudioClip clip_Rnote;
+    public AudioClip clip_Bnote;
+    public AudioClip clip_Gnote;
+    public AudioClip clip_Pnote;
+    public AudioClip clip_Fire;
+
     #endregion 
 
     #region private variables
@@ -69,7 +76,12 @@ public class ControlLevel : MonoBehaviour
 
     private void Start()
     {
-       // PlayerPrefs.DeleteAll();
+        if (PlayerPrefs.GetInt(PpsDellKey) == 0) 
+        {
+           PlayerPrefs.DeleteAll();
+           PlayerPrefs.SetInt(PpsDellKey, 1);
+        }
+
         levelCurrent = Level.ui;
         currentLevel = levelCurrent.ToString();
         BtnB.txtB.text = "";
@@ -97,11 +109,11 @@ public class ControlLevel : MonoBehaviour
         }
         if(PlayerPrefs.GetInt(PpsHighScore) >= 200)
         {
-            LockH.gameObject.SetActive(true);
+            LockH.gameObject.SetActive(false);
         }
         if(PlayerPrefs.GetInt(PpsHighScore) >= 100)
         {
-            LockM.gameObject.SetActive(true);
+            LockM.gameObject.SetActive(false);
         }
         if (course == true && levelCurrent != Level.ui)
         {
@@ -139,7 +151,6 @@ public class ControlLevel : MonoBehaviour
         if (countNote==0 && ButtonCL.CheckNote==true && levelCurrent != Level.ui)
         {
             course = false;
-           // Scores_Panel.gameObject.SetActive(false);
             Level_Panel.gameObject.SetActive(true);
             ShowScore();
             if (PlayerPrefs.GetInt(PpsHighScore) > 0)
@@ -200,8 +211,11 @@ public class ControlLevel : MonoBehaviour
     {
         if(levelCurrent != Level.Easy && levelCurrent == Level.ui)
         {
+            EL.StopMusic();
             levelCurrent = Level.Easy;
             Levels_btn();
+            EL.CheckClipE = false;
+            EL.setMusic();
         }
       
     }
@@ -209,16 +223,25 @@ public class ControlLevel : MonoBehaviour
     {
         if (levelCurrent != Level.Medium && levelCurrent == Level.ui)
         {
+            EL.StopMusic();
+            ML.StopMusic();
             levelCurrent = Level.Medium;
             Levels_btn();
+            ML.CheckClipM = false;
+            ML.setMusic();
         }
     }
     public void HardLevel_Btn()
     {
         if(levelCurrent != Level.Medium && levelCurrent == Level.ui)
         {
+            EL.StopMusic();
+            ML.StopMusic();
+            HL.StopMusic();
             levelCurrent = Level.Hard;
             Levels_btn();
+            HL.CheckClipH = false;
+            HL.setMusic();
         }
     }
 
@@ -239,14 +262,14 @@ public class ControlLevel : MonoBehaviour
     {
         switch (level)
         { case Level.Easy:
-                    EL.setListNote();
+                EL.setListNote();
                 break;
           case Level.Medium:
-                    ML.setListNote();
+                ML.setListNote();
                 break;
           case Level.Hard:
-                    HL.setListNote();
-                 break;            
+                HL.setListNote();
+                break;            
         }
         course = false;
     }
@@ -379,6 +402,7 @@ public class ControlLevel : MonoBehaviour
         ResetGameBtn.interactable = false;
         ResetGameBtn.gameObject.SetActive(false);
         Scores_Panel.gameObject.SetActive(false);
+        Messagewin.text = "";
     }
 
     public void BackofLevel()
@@ -392,6 +416,29 @@ public class ControlLevel : MonoBehaviour
         else
         {
             levelCurrent = Level.ui;
+        }
+    }
+
+    public void setMusic(AudioClip clip)
+    {
+        if (clip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+    }
+    public void MuteMusic()
+    {
+        if(levelCurrent==Level.Easy)
+        {
+            EL.MuteMusic();
+        }
+        if(levelCurrent == Level.Medium)
+        {
+            ML.MuteMusic();
+        }
+        if(levelCurrent==Level.Hard)
+        {
+            HL.MuteMusic();
         }
     }
     #endregion

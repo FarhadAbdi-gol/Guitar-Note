@@ -1,13 +1,11 @@
-﻿using System.Collections;
+﻿
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MediumLevel : MonoBehaviour, IStrategy
 {
-    public static float MediumSpeed;
-    public AudioSource audioSource;
-    public AudioClip clip;
-     List<int> MediumList = new List<int> {2,4,3,1,3,4,3,2,4,1,4,2,3,1,4,2,3,4,2,1,3,4,2,1,3,4,3,2,3,4,1,3,2,4,3,1,4,2,3,1,4,2,3,1,2,4,1,3,2,4,
+    public bool CheckClipM;
+    List<int> MediumList = new List<int> {2,4,3,1,3,4,3,2,4,1,4,2,3,1,4,2,3,4,2,1,3,4,2,1,3,4,3,2,3,4,1,3,2,4,3,1,4,2,3,1,4,2,3,1,2,4,1,3,2,4,
                                            2,4,3,1,3,4,3,2,4,1,4,2,3,1,4,2,3,4,2,1,3,4,2,1,3,4,3,2,3,4,1,3,2,4,3,1,4,2,3,1,4,2,3,1,2,3,2,1,4,2};
 
     ControlLevel CL;
@@ -24,9 +22,25 @@ public class MediumLevel : MonoBehaviour, IStrategy
 
     public void setMusic()
     {
-        if (clip != null && audioSource != null)
+        if (CL.clip_MediumLevel != null && CL.audioSource != null && CheckClipM == false)
         {
-            audioSource.PlayOneShot(clip);
+            CL.audioSource.PlayOneShot(CL.clip_MediumLevel);
+            CheckClipM = true;
+        }
+    }
+    public void StopMusic()
+    {
+        if (CL.clip_EasyLevel != null && CL.audioSource != null && CheckClipM == true)
+        {
+            CL.audioSource.Stop();
+            CheckClipM = false;
+        }
+    }
+    public void MuteMusic()
+    {
+        if (CL.clip_EasyLevel != null && CL.audioSource != null && CheckClipM == true)
+        {
+                CL.audioSource.mute = !CL.audioSource.mute;
         }
     }
 }
