@@ -1044,10 +1044,10 @@ MonoBehaviour:
   clip_EasyLevel: {fileID: 8300000, guid: e27fbd56a5a251344a9aa36fe8f2e5d5, type: 3}
   clip_MediumLevel: {fileID: 8300000, guid: 64634daab144cfd43ae553381d913e1d, type: 3}
   clip_HardLevel: {fileID: 8300000, guid: ad3680870d391334e9ec6c8a0d20ec4c, type: 3}
-  clip_Rnote: {fileID: 8300000, guid: 002e7e918d4435d449a66d7b88810c7f, type: 3}
-  clip_Bnote: {fileID: 8300000, guid: e8aa367081de58e47800f67a9fa94533, type: 3}
-  clip_Gnote: {fileID: 8300000, guid: 51ae26fd57a38f843963048b7ce3107f, type: 3}
-  clip_Pnote: {fileID: 8300000, guid: bf4b06459b7a8e8468fb9a7f45381dbe, type: 3}
+  clip_Rnote: {fileID: 8300000, guid: 3b85a3d632e7eee4683fb47dab8487f2, type: 3}
+  clip_Bnote: {fileID: 8300000, guid: 83a05b9ffc9407c4f936322d1323370f, type: 3}
+  clip_Gnote: {fileID: 8300000, guid: 7079c814937b66444bed35ccf975306a, type: 3}
+  clip_Pnote: {fileID: 8300000, guid: 3702e8ff18452a84a9d7250759ff7433, type: 3}
   clip_Fire: {fileID: 8300000, guid: 402d11bc508553e4ab693de870263c9e, type: 3}
 --- !u!4 &262545231
 Transform:
