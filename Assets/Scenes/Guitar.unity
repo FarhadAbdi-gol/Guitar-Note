@@ -4158,7 +4158,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Guitar Hero
+  m_Text: Guitar Note
 --- !u!222 &1275516591
 CanvasRenderer:
   m_ObjectHideFlags: 0
