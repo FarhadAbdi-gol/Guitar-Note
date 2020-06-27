@@ -26,7 +26,7 @@ public class ControlLevel : MonoBehaviour
     public float noteX;
     public bool course=false;
     public int Indexlist = 0;
-    public int Lenghlist;
+    public int Lenghlist=100;
     public int Conter;
     public Text Scoretxt;
     public Text HighScoretxt;
@@ -87,9 +87,52 @@ public class ControlLevel : MonoBehaviour
         BtnG.txtG.text = "";
         BtnP.txtP.text = "";
         if (PlayerPrefs.HasKey(PpsScore))
+        {
             Scoretxt.text = PlayerPrefs.GetInt(PpsScore).ToString();
+        }
+            
         if(PlayerPrefs.HasKey(PpsHighScore))
+        {
             HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+            if (PlayerPrefs.GetInt(PpsHighScore) < Lenghlist)
+            {
+                LockH.gameObject.SetActive(true);
+                LockM.gameObject.SetActive(true);
+                ResetGameBtn.gameObject.SetActive(false);
+                EasyBtn.interactable = true;
+                MediumBtn.interactable = false;
+                HardBtn.interactable = false;
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) > Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 2*Lenghlist)
+            {
+                LockH.gameObject.SetActive(false);
+                LockM.gameObject.SetActive(true);
+                ResetGameBtn.gameObject.SetActive(false);
+                EasyBtn.interactable = false;
+                MediumBtn.interactable = true;
+                HardBtn.interactable = false;
+
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) > 2*Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 3 * Lenghlist)
+            {
+                LockH.gameObject.SetActive(false);
+                LockM.gameObject.SetActive(false);
+                ResetGameBtn.gameObject.SetActive(false);
+                EasyBtn.interactable = false;
+                MediumBtn.interactable = false;
+                HardBtn.interactable = true;
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) == 3*Lenghlist)
+            {
+                LockH.gameObject.SetActive(false);
+                LockM.gameObject.SetActive(false);
+                ResetGameBtn.gameObject.SetActive(true);
+                ResetGameBtn.interactable = true;
+                EasyBtn.interactable = false;
+                MediumBtn.interactable = false;
+                HardBtn.interactable = false;
+            }
+        }
     }
     private void Update()
     {   if(PlayerPrefs.HasKey(PpsHighScore))
