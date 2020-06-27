@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +26,7 @@ public class ControlLevel : MonoBehaviour
     public float noteX;
     public bool course=false;
     public int Indexlist = 0;
-    public int Lenghlist=100;
+    public int Lenghlist;
     public int Conter;
     public Text Scoretxt;
     public Text HighScoretxt;
@@ -74,6 +74,7 @@ public class ControlLevel : MonoBehaviour
 
     private void Start()
     {
+ 
         if (PlayerPrefs.GetInt(PpsDellKey) == 0) 
         {
            PlayerPrefs.DeleteAll();
@@ -86,92 +87,12 @@ public class ControlLevel : MonoBehaviour
         BtnR.txtR.text = "";
         BtnG.txtG.text = "";
         BtnP.txtP.text = "";
-        if (PlayerPrefs.HasKey(PpsScore))
-        {
-            Scoretxt.text = PlayerPrefs.GetInt(PpsScore).ToString();
-        }
-            
-        if(PlayerPrefs.HasKey(PpsHighScore))
-        {
-            HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
-            if (PlayerPrefs.GetInt(PpsHighScore) < Lenghlist)
-            {
-                LockH.gameObject.SetActive(true);
-                LockM.gameObject.SetActive(true);
-                ResetGameBtn.gameObject.SetActive(false);
-                EasyBtn.interactable = true;
-                MediumBtn.interactable = false;
-                HardBtn.interactable = false;
-            }
-            else if (PlayerPrefs.GetInt(PpsHighScore) > Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 2*Lenghlist)
-            {
-                LockH.gameObject.SetActive(false);
-                LockM.gameObject.SetActive(true);
-                ResetGameBtn.gameObject.SetActive(false);
-                EasyBtn.interactable = false;
-                MediumBtn.interactable = true;
-                HardBtn.interactable = false;
 
-            }
-            else if (PlayerPrefs.GetInt(PpsHighScore) > 2*Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 3 * Lenghlist)
-            {
-                LockH.gameObject.SetActive(false);
-                LockM.gameObject.SetActive(false);
-                ResetGameBtn.gameObject.SetActive(false);
-                EasyBtn.interactable = false;
-                MediumBtn.interactable = false;
-                HardBtn.interactable = true;
-            }
-            else if (PlayerPrefs.GetInt(PpsHighScore) == 3*Lenghlist)
-            {
-                LockH.gameObject.SetActive(false);
-                LockM.gameObject.SetActive(false);
-                ResetGameBtn.gameObject.SetActive(true);
-                ResetGameBtn.interactable = true;
-                EasyBtn.interactable = false;
-                MediumBtn.interactable = false;
-                HardBtn.interactable = false;
-            }
-        }
+        ActiveControl();
+
     }
     private void Update()
-    {   if(PlayerPrefs.HasKey(PpsHighScore))
-        {
-            if (PlayerPrefs.GetInt(PpsHighScore) == 0)
-            {
-                ResetGameBtn.gameObject.SetActive(false);
-            }
-            else if (PlayerPrefs.GetInt(PpsHighScore) > 0 && PlayerPrefs.GetInt(PpsHighScore) < 3*Lenghlist)
-            {
-                ResetGameBtn.gameObject.SetActive(true);
-                ResetGameBtn.interactable = false;
-            }
-            else if(PlayerPrefs.GetInt(PpsHighScore) == 3*Lenghlist)
-            {
-                EasyBtn.interactable = false;
-                MediumBtn.interactable = false;
-                HardBtn.interactable = false;
-                ResetGameBtn.gameObject.SetActive(true);
-                ResetGameBtn.interactable = true;
-            }
-
-            if (PlayerPrefs.GetInt(PpsHighScore) < Lenghlist)
-            {
-                LockH.gameObject.SetActive(true);
-                LockM.gameObject.SetActive(true);
-            }
-            else if (PlayerPrefs.GetInt(PpsHighScore) >= 2*Lenghlist)
-            {
-                LockH.gameObject.SetActive(false);
-                LockM.gameObject.SetActive(false);
-            }
-            else if (PlayerPrefs.GetInt(PpsHighScore) >= Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 2*Lenghlist)
-            {
-                LockH.gameObject.SetActive(true);
-                LockM.gameObject.SetActive(false);
-            }
-        }
-       
+    {  
         if (course == true && levelCurrent != Level.ui)
         {
             if (levelCurrent == Level.Easy)
@@ -181,18 +102,7 @@ public class ControlLevel : MonoBehaviour
             if (levelCurrent == Level.Hard)
                 ChangedLevel(Level.Hard);
         }
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                AndroidJavaObject activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-                activity.Call<bool>("moveTaskToBack", true);
-            }
-            else
-            {
-                Application.Quit();
-            }
-        }
+      
         if (Conter > 0 && levelCurrent != Level.ui)
         {
             Guitar.gameObject.GetComponent<Animator>().enabled = true;
@@ -203,7 +113,6 @@ public class ControlLevel : MonoBehaviour
             Guitar.gameObject.GetComponent<Animator>().enabled = false;         
         }
 
-        CountNote();
 
         if (countNote==0 && ButtonCL.CheckNote==true && levelCurrent != Level.ui)
         {
@@ -213,9 +122,6 @@ public class ControlLevel : MonoBehaviour
 
             if (levelCurrent == Level.Easy && Score == Lenghlist)
             {              
-                MediumBtn.interactable = true;
-                LockM.gameObject.SetActive(false);
-                EasyBtn.interactable = false;
                 Messagewin.text = "Good";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
                 levelCurrent = Level.ui;
@@ -229,9 +135,6 @@ public class ControlLevel : MonoBehaviour
 
             else if (levelCurrent == Level.Medium && Score == Lenghlist)
             {
-                HardBtn.interactable = true;
-                LockH.gameObject.SetActive(false);
-                MediumBtn.interactable = false;
                 Messagewin.text = "Perfect";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
                 levelCurrent = Level.ui;
@@ -242,7 +145,6 @@ public class ControlLevel : MonoBehaviour
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
                 levelCurrent = Level.ui;
             }
-          
             else if (levelCurrent == Level.Hard && Score == Lenghlist)
             {
                 Messagewin.text = "You Win";
@@ -258,6 +160,79 @@ public class ControlLevel : MonoBehaviour
         }
         currentLevel = levelCurrent.ToString();
     }
+    private void FixedUpdate()
+    {
+
+        CountNote();
+
+        if (levelCurrent==Level.ui)
+            ActiveControl();
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                AndroidJavaObject activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+                activity.Call<bool>("moveTaskToBack", true);
+            }
+            else
+            {
+                Application.Quit();
+            }
+        }
+    }
+    private void ActiveControl()
+    {
+        Lenghlist = 100;
+
+        if (PlayerPrefs.HasKey(PpsScore))
+        {
+            Scoretxt.text = PlayerPrefs.GetInt(PpsScore).ToString();
+        }
+        if (PlayerPrefs.GetInt(PpsHighScore) >= 0)
+        {
+            HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+            if (PlayerPrefs.GetInt(PpsHighScore) < Lenghlist)
+            {
+                LockH.gameObject.SetActive(true);
+                LockM.gameObject.SetActive(true);
+                ResetGameBtn.gameObject.SetActive(false);
+                EasyBtn.interactable = true;
+                MediumBtn.interactable = false;
+                HardBtn.interactable = false;
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) >= Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 2 * Lenghlist)
+            {
+                LockH.gameObject.SetActive(false);
+                LockM.gameObject.SetActive(true);
+                ResetGameBtn.gameObject.SetActive(false);
+                EasyBtn.interactable = false;
+                MediumBtn.interactable = true;
+                HardBtn.interactable = false;
+
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) >= 2 * Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 3 * Lenghlist)
+            {
+                LockH.gameObject.SetActive(false);
+                LockM.gameObject.SetActive(false);
+                ResetGameBtn.gameObject.SetActive(false);
+                EasyBtn.interactable = false;
+                MediumBtn.interactable = false;
+                HardBtn.interactable = true;
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) == 3 * Lenghlist)
+            {
+                LockH.gameObject.SetActive(false);
+                LockM.gameObject.SetActive(false);
+                ResetGameBtn.gameObject.SetActive(true);
+                ResetGameBtn.interactable = true;
+                EasyBtn.interactable = false;
+                MediumBtn.interactable = false;
+                HardBtn.interactable = false;
+            }
+        }
+    }
+
     private void CountNote()
     {
         GameObject[] NoteCount = GameObject.FindGameObjectsWithTag("note");
