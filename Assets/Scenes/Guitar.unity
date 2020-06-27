@@ -1009,11 +1009,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Guitar: {fileID: 7700485753161889135}
-  dancer: {fileID: 0}
   Level_Panel: {fileID: 1371734277}
   Game_Panel: {fileID: 315130065}
   Scores_Panel: {fileID: 863061370}
-  win_Particaler: {fileID: 0}
   ButtonR: {fileID: 5953878808484923486}
   ButtonB: {fileID: 165848650}
   ButtonG: {fileID: 1984379195}
@@ -5872,7 +5870,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1933750383
 RectTransform:
   m_ObjectHideFlags: 0

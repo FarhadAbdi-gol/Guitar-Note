@@ -178,11 +178,6 @@ public class ControlLevel : MonoBehaviour
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
                 levelCurrent = Level.ui;
             }
-            //else
-            //{
-            //    Messagewin.text = "";
-            //    levelCurrent = Level.ui;
-            //}
 
             if (levelCurrent == Level.Medium && Score > 99)
             {
@@ -339,18 +334,9 @@ public class ControlLevel : MonoBehaviour
         PlayerPrefs.Save();
         Scoretxt.text = (Score).ToString();
 
-        if(PlayerPrefs.HasKey(PpsHighScore))
+        if(Score <= Lenghlist && HighScore < Lenghlist)
         {
-            HighScore = PlayerPrefs.GetInt(PpsHighScore);
-            if (Score == Lenghlist && HighScore==100 || HighScore == 200)
-            {
-                HighScore += Score;
-                PlayerPrefs.SetInt(PpsHighScore, HighScore);
-                PlayerPrefs.Save();
-                HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
-                Delletkey();
-            }
-            else if(Score ==Lenghlist && HighScore <100 )
+            if (Score > HighScore)
             {
                 HighScore = Score;
                 PlayerPrefs.SetInt(PpsHighScore, HighScore);
@@ -360,30 +346,41 @@ public class ControlLevel : MonoBehaviour
             }
             else
             {
-                if(HighScore > Score)
-                {
-                    PlayerPrefs.SetInt(PpsHighScore, HighScore);
-                    PlayerPrefs.Save();
-                    HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
-                    Delletkey();
-                }
-                else if(HighScore < Score)
-                {
-                    HighScore = Score;
-                    PlayerPrefs.SetInt(PpsHighScore, HighScore);
-                    PlayerPrefs.Save();
-                    HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
-                    Delletkey();
-                }
-            }                      
+                HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                Delletkey();
+            }
         }
-        else if(PlayerPrefs.GetInt(PpsHighScore)==0)
+        else if(Score <= Lenghlist && HighScore >= Lenghlist && HighScore < 2*Lenghlist)
         {
-            HighScore = Score;
-            PlayerPrefs.SetInt(PpsHighScore, HighScore);
-            PlayerPrefs.Save();
-            HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
-            Delletkey();
+            if (Score > HighScore-Lenghlist)
+            {
+                HighScore = Score+Lenghlist;
+                PlayerPrefs.SetInt(PpsHighScore, HighScore);
+                PlayerPrefs.Save();
+                HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                Delletkey();
+            }
+            else
+            {
+                HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                Delletkey();
+            }
+        }
+        else if (Score <= Lenghlist && HighScore >= 2*Lenghlist && HighScore < 3 * Lenghlist)
+        {
+            if (Score > HighScore - 2*Lenghlist)
+            {
+                HighScore = Score + 2*Lenghlist;
+                PlayerPrefs.SetInt(PpsHighScore, HighScore);
+                PlayerPrefs.Save();
+                HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                Delletkey();
+            }
+            else
+            {
+                HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
+                Delletkey();
+            }
         }
     }
 
