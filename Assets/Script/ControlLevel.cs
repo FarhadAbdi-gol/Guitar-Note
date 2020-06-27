@@ -90,8 +90,6 @@ public class ControlLevel : MonoBehaviour
             Scoretxt.text = PlayerPrefs.GetInt(PpsScore).ToString();
         if(PlayerPrefs.HasKey(PpsHighScore))
             HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
-        if (PlayerPrefs.GetInt(PpsHighScore) > 0)
-            ResetGameBtn.gameObject.SetActive(true);
     }
     private void Update()
     {   
@@ -101,10 +99,15 @@ public class ControlLevel : MonoBehaviour
             MediumBtn.interactable = false;
             HardBtn.interactable = false;
             ResetGameBtn.gameObject.SetActive(true);
+            ResetGameBtn.interactable = true;
         }
         if(PlayerPrefs.GetInt(PpsHighScore) == 0)
         {
             ResetGameBtn.gameObject.SetActive(false);
+        }
+        if (PlayerPrefs.GetInt(PpsHighScore) > 0 && PlayerPrefs.GetInt(PpsHighScore) < 300)
+        {
+            ResetGameBtn.interactable=false;
         }
         if (PlayerPrefs.GetInt(PpsHighScore) < 100)
         {
@@ -159,8 +162,6 @@ public class ControlLevel : MonoBehaviour
             course = false;
             Level_Panel.gameObject.SetActive(true);
             ShowScore();
-            if (PlayerPrefs.GetInt(PpsHighScore) > 0)
-                ResetGameBtn.gameObject.SetActive(true);
 
             if (levelCurrent == Level.Easy && Score > 99)
             {              
@@ -172,8 +173,7 @@ public class ControlLevel : MonoBehaviour
                 levelCurrent = Level.ui;
             }
             if(levelCurrent == Level.Easy && Score < 100)
-            {
-                ResetGameBtn.interactable = true;
+            { 
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
                 levelCurrent = Level.ui;
@@ -407,6 +407,8 @@ public class ControlLevel : MonoBehaviour
     }
     public void Reset_Game()
     {
+        PlayerPrefs.DeleteKey(PpsHighScore);
+        PlayerPrefs.DeleteKey(PpsScore);
         PlayerPrefs.SetInt(PpsHighScore, 0);
         PlayerPrefs.SetInt(PpsScore, 0);
         PlayerPrefs.Save();
