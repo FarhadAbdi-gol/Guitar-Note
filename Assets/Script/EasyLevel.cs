@@ -19,7 +19,7 @@ public class EasyLevel : MonoBehaviour, IStrategy
 
     public void setListNote()
     {
-        StartCoroutine(CL.EasyNote(1f, EasyList));
+        StartCoroutine(CL.CreateNote(1f, EasyList));
     }
 
     public void setMusic()

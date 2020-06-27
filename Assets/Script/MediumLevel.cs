@@ -17,7 +17,7 @@ public class MediumLevel : MonoBehaviour, IStrategy
 
     public void setListNote()
     {
-        StartCoroutine(CL.EasyNote(.7f, MediumList));
+        StartCoroutine(CL.CreateNote(.7f, MediumList));
     }
 
     public void setMusic()

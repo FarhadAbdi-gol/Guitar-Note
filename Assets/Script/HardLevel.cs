@@ -19,7 +19,7 @@ public class HardLevel : MonoBehaviour, IStrategy
     }
     public void setListNote()
     {
-        StartCoroutine(CL.EasyNote(.4f, HardList));
+        StartCoroutine(CL.CreateNote(.4f, HardList));
     }
 
     public void setMusic()

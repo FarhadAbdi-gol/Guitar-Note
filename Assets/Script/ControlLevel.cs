@@ -92,38 +92,43 @@ public class ControlLevel : MonoBehaviour
             HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
     }
     private void Update()
-    {   
-        if(PlayerPrefs.GetInt(PpsHighScore)==300)
+    {   if(PlayerPrefs.HasKey(PpsHighScore))
         {
-            EasyBtn.interactable = false;
-            MediumBtn.interactable = false;
-            HardBtn.interactable = false;
-            ResetGameBtn.gameObject.SetActive(true);
-            ResetGameBtn.interactable = true;
+            if (PlayerPrefs.GetInt(PpsHighScore) == 0)
+            {
+                ResetGameBtn.gameObject.SetActive(false);
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) > 0 && PlayerPrefs.GetInt(PpsHighScore) < 3*Lenghlist)
+            {
+                ResetGameBtn.gameObject.SetActive(true);
+                ResetGameBtn.interactable = false;
+            }
+            else if(PlayerPrefs.GetInt(PpsHighScore) == 3*Lenghlist)
+            {
+                EasyBtn.interactable = false;
+                MediumBtn.interactable = false;
+                HardBtn.interactable = false;
+                ResetGameBtn.gameObject.SetActive(true);
+                ResetGameBtn.interactable = true;
+            }
+
+            if (PlayerPrefs.GetInt(PpsHighScore) < Lenghlist)
+            {
+                LockH.gameObject.SetActive(true);
+                LockM.gameObject.SetActive(true);
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) >= 2*Lenghlist)
+            {
+                LockH.gameObject.SetActive(false);
+                LockM.gameObject.SetActive(false);
+            }
+            else if (PlayerPrefs.GetInt(PpsHighScore) >= Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 2*Lenghlist)
+            {
+                LockH.gameObject.SetActive(true);
+                LockM.gameObject.SetActive(false);
+            }
         }
-        if(PlayerPrefs.GetInt(PpsHighScore) == 0)
-        {
-            ResetGameBtn.gameObject.SetActive(false);
-        }
-        if (PlayerPrefs.GetInt(PpsHighScore) > 0 && PlayerPrefs.GetInt(PpsHighScore) < 300)
-        {
-            ResetGameBtn.interactable=false;
-        }
-        if (PlayerPrefs.GetInt(PpsHighScore) < 100)
-        {
-            LockH.gameObject.SetActive(true);
-            LockM.gameObject.SetActive(true);
-        }
-        if (PlayerPrefs.GetInt(PpsHighScore) >= 200)
-        {
-            LockH.gameObject.SetActive(false);
-            LockM.gameObject.SetActive(false);
-        }
-        if(PlayerPrefs.GetInt(PpsHighScore) >= 100 && PlayerPrefs.GetInt(PpsHighScore) < 200)
-        {
-            LockH.gameObject.SetActive(true);
-            LockM.gameObject.SetActive(false);
-        }
+       
         if (course == true && levelCurrent != Level.ui)
         {
             if (levelCurrent == Level.Easy)
@@ -163,7 +168,7 @@ public class ControlLevel : MonoBehaviour
             Level_Panel.gameObject.SetActive(true);
             ShowScore();
 
-            if (levelCurrent == Level.Easy && Score > 99)
+            if (levelCurrent == Level.Easy && Score == Lenghlist)
             {              
                 MediumBtn.interactable = true;
                 LockM.gameObject.SetActive(false);
@@ -172,14 +177,14 @@ public class ControlLevel : MonoBehaviour
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
                 levelCurrent = Level.ui;
             }
-            if(levelCurrent == Level.Easy && Score < 100)
+            else if(levelCurrent == Level.Easy && Score < Lenghlist)
             { 
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
                 levelCurrent = Level.ui;
             }
 
-            if (levelCurrent == Level.Medium && Score > 99)
+            else if (levelCurrent == Level.Medium && Score == Lenghlist)
             {
                 HardBtn.interactable = true;
                 LockH.gameObject.SetActive(false);
@@ -188,20 +193,20 @@ public class ControlLevel : MonoBehaviour
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
                 levelCurrent = Level.ui;
             }
-            if (levelCurrent == Level.Medium && Score < 100)
+            else if (levelCurrent == Level.Medium && Score < Lenghlist)
             {
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
                 levelCurrent = Level.ui;
             }
           
-            if (levelCurrent == Level.Hard && Score > 99)
+            else if (levelCurrent == Level.Hard && Score == Lenghlist)
             {
                 Messagewin.text = "You Win";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.green;
                 levelCurrent = Level.ui;
             }
-            if (levelCurrent == Level.Hard && Score < 100)
+            else if (levelCurrent == Level.Hard && Score < Lenghlist)
             {
                 Messagewin.text = "Repeat Game";
                 Messagewin.gameObject.GetComponentInChildren<Text>().color = Color.red;
@@ -289,7 +294,7 @@ public class ControlLevel : MonoBehaviour
         course = false;
     }
 
-    public IEnumerator EasyNote(float sec, List<int> noteList)
+    public IEnumerator CreateNote(float sec, List<int> noteList)
     {
         Lenghlist = noteList.Count;
         if(Indexlist==0)
@@ -332,9 +337,9 @@ public class ControlLevel : MonoBehaviour
         Score = BtnR.ScoreR + BtnB.ScoreB + BtnG.ScoreG + BtnP.ScoreP;
         PlayerPrefs.SetInt(PpsScore, Score);
         PlayerPrefs.Save();
-        Scoretxt.text = (Score).ToString();
+        Scoretxt.text = Score.ToString();
 
-        if(Score <= Lenghlist && HighScore < Lenghlist)
+        if (levelCurrent == Level.Easy)
         {
             if (Score > HighScore)
             {
@@ -344,31 +349,31 @@ public class ControlLevel : MonoBehaviour
                 HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
                 Delletkey();
             }
-            else
+            else if (Score <= HighScore)
             {
                 HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
                 Delletkey();
             }
         }
-        else if(Score <= Lenghlist && HighScore >= Lenghlist && HighScore < 2*Lenghlist)
+        else if (levelCurrent == Level.Medium)
         {
-            if (Score > HighScore-Lenghlist)
+            if (Score > (HighScore-Lenghlist))
             {
-                HighScore = Score+Lenghlist;
+                HighScore = Score + Lenghlist;
                 PlayerPrefs.SetInt(PpsHighScore, HighScore);
                 PlayerPrefs.Save();
                 HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
                 Delletkey();
             }
-            else
+            else if(Score <= (HighScore - Lenghlist))
             {
                 HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
                 Delletkey();
             }
         }
-        else if (Score <= Lenghlist && HighScore >= 2*Lenghlist && HighScore < 3 * Lenghlist)
+        else if (levelCurrent == Level.Hard )
         {
-            if (Score > HighScore - 2*Lenghlist)
+            if (Score > (HighScore - 2*Lenghlist))
             {
                 HighScore = Score + 2*Lenghlist;
                 PlayerPrefs.SetInt(PpsHighScore, HighScore);
@@ -376,7 +381,7 @@ public class ControlLevel : MonoBehaviour
                 HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
                 Delletkey();
             }
-            else
+            else if (Score <= (HighScore - 2*Lenghlist))
             {
                 HighScoretxt.text = PlayerPrefs.GetInt(PpsHighScore).ToString();
                 Delletkey();
