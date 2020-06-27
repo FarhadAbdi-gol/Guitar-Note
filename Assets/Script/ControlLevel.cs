@@ -203,8 +203,8 @@ public class ControlLevel : MonoBehaviour
             }
             else if (PlayerPrefs.GetInt(PpsHighScore) >= Lenghlist && PlayerPrefs.GetInt(PpsHighScore) < 2 * Lenghlist)
             {
-                LockH.gameObject.SetActive(false);
-                LockM.gameObject.SetActive(true);
+                LockH.gameObject.SetActive(true);
+                LockM.gameObject.SetActive(false);
                 ResetGameBtn.gameObject.SetActive(false);
                 EasyBtn.interactable = false;
                 MediumBtn.interactable = true;
